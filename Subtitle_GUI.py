@@ -1,0 +1,54 @@
+from tkinter import *
+from tkinter import ttk
+import Sub_downloader
+import threading
+
+def calculate(*args):
+	try:
+		value = float(feet.get())
+		meters.set((0.3048 * value * 10000.0 + 0.5)/10000.0)
+	except ValueError:
+		pass
+def find_subs(*args):
+	try:
+		# vidID = (url.get())
+		the_subs = Sub_downloader.yt_trans(url.get())
+		print(the_subs)
+		subtitles.set(the_subs)
+	except ValueError:
+		pass
+
+root = Tk()
+root.title("Subtitles from Youtube")
+
+mainframe = ttk.Frame(root, padding="3 3 12 12")
+mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+root.columnconfigure(0, weight=1)
+root.rowconfigure(0, weight=1)
+
+
+url = StringVar()
+subtitles = StringVar()
+
+
+# feet_entry = ttk.Entry(mainframe, width=30, textvariable=feet)
+feet_entry = ttk.Entry(mainframe, width=30, textvariable=url)
+# feet_entry.insert(0, 'URL Here...')
+feet_entry.grid(column=1, row=1, columnspan = 2, sticky=(W, E))
+
+# ttk.Label(mainframe, textvariable=meters).grid(column=2, row=2, sticky=(W, E))
+ttk.Label(mainframe, textvariable=subtitles, wraplength=500).grid(column=1, row=4, sticky=(W, E), columnspan=3)
+###threading being used to keep TKinter from freezing
+ttk.Button(mainframe, text="Find Subtitles", command=threading.Thread(target=find_subs).start()).grid(column=3, row=2, sticky=W)
+
+ttk.Label(mainframe, text="Video URL").grid(column=3, row=1, sticky=W)
+# ttk.Label(mainframe, text="is equivalent to").grid(column=1, row=2, sticky=E)
+# ttk.Label(mainframe, text="meters").grid(column=3, row=2, sticky=W)
+ttk.Label(mainframe, text="SUBTITLES BELOW").grid(column=2, row=3, sticky=W)
+
+for child in mainframe.winfo_children(): child.grid_configure(padx=5, pady=5)
+
+feet_entry.focus()
+root.bind('<Return>', find_subs)
+
+root.mainloop()
