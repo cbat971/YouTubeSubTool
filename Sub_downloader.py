@@ -24,10 +24,14 @@ def yt_trans(url, is_id=False):
         if 'v=' in str(url):
             id = str(url).split('v=')[-1]
             url = 'https://youtu.be/' + id
+            transcript =(YouTubeTranscriptApi.get_transcript(id))
+
         else:
             id = str(url).split('/')[-1]
             url = 'https://youtu.be/' + id
-        transcript =(YouTubeTranscriptApi.get_transcript(id))
+            transcript =(YouTubeTranscriptApi.get_transcript(id))
+
+        
         for x in transcript:
             trans_text = str(trans_text) + " " + str(x['text'])
         return ((trans_text))
